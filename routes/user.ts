@@ -22,14 +22,20 @@ router.post('/user/login', async (request, response, next) => {
 
     const firebaseResponse = await firebase.auth().signInWithEmailAndPassword(email, password)
         .then((response) => {
-            return {haveError: false};
+            let uid = "";
+
+            if (response !== null){
+                uid = response["user"].uid;
+            }
+
+            return {haveError: false, uid: uid};
         })
         .catch(function (error) {
             return {haveError: true, message: error.message}
         });
 
     if (!firebaseResponse["haveError"]){
-        response.status(200).send("user logged in successfully");
+        response.status(200).send(firebaseResponse["uid"]);
     } else {
         response.status(401).send(firebaseResponse["message"]);
     }

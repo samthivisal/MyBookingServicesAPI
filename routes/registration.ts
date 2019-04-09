@@ -2,8 +2,7 @@
  * Import express framework
  */
 import * as express from 'express';
-
-import createUser from "../firebase/registration";
+import * as firebase from 'firebase';
 
 /**
  * Express router usage
@@ -21,9 +20,12 @@ router.post('/user', async (request, response, next) => {
     const email = request.body.email;
     const password = request.body.password;
 
-    const firebaseResponse = await createUser(email, password)
+    const firebaseResponse = await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((response) => {
-            return response;
+            return {haveError: false};
+        })
+        .catch(function (error) {
+            return {haveError: true, message: error.message}
         });
 
     if (!firebaseResponse["haveError"]) {
