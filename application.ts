@@ -6,7 +6,9 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
 /** Importing routes */
-import bookingMiddleware from './routes/booking';
+import registrationMiddleware from './routes/registration';
+import userMiddleware from './routes/user';
+import backofficeserviceMiddleware from './routes/backofficeservice';
 
 const application = express();
 
@@ -24,7 +26,17 @@ application.options("/*", function(request, response, next){
 
 application.use(
     '/',
-    bookingMiddleware
+    registrationMiddleware
+);
+
+application.use(
+    '/',
+    userMiddleware
+);
+
+application.use(
+    '/',
+    backofficeserviceMiddleware
 );
 
 // catch 404 and forward to error handler

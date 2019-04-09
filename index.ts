@@ -2,10 +2,31 @@
 
 import * as http from 'http';
 import application from './application';
+import * as dotenv from 'dotenv';
+import * as firebase from 'firebase';
 
 const port = normalizePort(process.env.PORT || '5757');
 
 application.set('port', port);
+
+/** Load .env config **/
+const result = dotenv.config();
+
+if (result.error) {
+    console.log(result.error);
+}
+
+/** FIREBASE */
+const firebaseConfig = {
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    databaseURL: process.env.DATABASE_URL,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID
+};
+
+firebase.initializeApp(firebaseConfig);
 
 const server = http.createServer(application);
 

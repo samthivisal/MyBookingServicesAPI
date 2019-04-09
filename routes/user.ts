@@ -1,0 +1,38 @@
+/**
+ * Import express framework
+ */
+import * as express from 'express';
+import * as firebase from 'firebase';
+
+/**
+ * Express router usage
+ */
+const router = express.Router();
+
+router.get('/hello8', (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    response.status(200).send('Hello on duty!');
+});
+
+router.post('/user/login', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    const email = request.body.email;
+    const password = request.body.password;
+
+    const firebaseResponse = await firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((response) => {
+            return {haveError: false};
+        })
+        .catch(function (error) {
+            return {haveError: true, message: error.message}
+        });
+
+    if (!firebaseResponse["haveError"]){
+        response.status(200).send("user logged in successfully");
+    } else {
+        response.status(401).send(firebaseResponse["message"]);
+    }
+});
+
+export default router;
