@@ -9,12 +9,18 @@ import * as firebase from 'firebase';
  */
 const router = express.Router();
 
-router.get('/hello8', (request, response, next) => {
+/**
+ * route to check user service is up
+ */
+router.get('/hello_user', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     response.status(200).send('Hello on duty!');
 });
 
+/**
+ * route to log an user
+ */
 router.post('/user/login', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
     const email = request.body.email;

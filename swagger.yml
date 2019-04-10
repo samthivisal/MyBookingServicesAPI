@@ -1,0 +1,72 @@
+swagger: "2.0"
+info:
+  description: "All routes of MY BOOKING SERVICE described"
+  version: "1.0.0"
+  title: "My booking service"
+basePath: "/"
+tags:
+- name: "REGISTRATION"
+  description: "registration service"
+- name: "USER"
+  description: "user service"
+paths:
+# =================================================================== REGISTRATION
+  /hello_registration:
+    get:
+      tags:
+      - "REGISTRATION"
+      summary: "registration service check up"
+      description: "route to check registration service is up"
+      responses:
+        200:
+          description: "registration is up"
+  /user:
+    post:
+      tags:
+      - "REGISTRATION"
+      summary: "route to register an user"
+      description: "route to register an user"
+      parameters:
+      - name: "email"
+        description: "user mail address"
+        required: true
+        format: "string"
+      - name: "password"
+        description: "user password"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "user created successfully"
+        409:
+          description: "user already exists"
+# =================================================================== User
+  /hello_user:
+    get:
+      tags:
+      - "USER"
+      summary: "user service check up"
+      description: "route to check user service is up"
+      responses:
+        200:
+          description: "registration is up"
+  /user/login:
+    post:
+      tags:
+      - "USER"
+      summary: "route to log an user"
+      description: "route to log an user"
+      parameters:
+      - name: "email"
+        description: "user mail address"
+        required: true
+        format: "string"
+      - name: "password"
+        description: "user password"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "user logged in successfully"
+        401:
+          description: "user already logged in"

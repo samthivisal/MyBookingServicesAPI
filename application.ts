@@ -9,6 +9,7 @@ import * as bodyParser from 'body-parser';
 import registrationMiddleware from './routes/registration';
 import userMiddleware from './routes/user';
 import backofficeserviceMiddleware from './routes/backofficeservice';
+import apidocumentationMiddleware from './routes/api-documentation';
 
 const application = express();
 
@@ -24,20 +25,11 @@ application.options("/*", function(request, response, next){
     next();
 });
 
-application.use(
-    '/',
-    registrationMiddleware
-);
-
-application.use(
-    '/',
-    userMiddleware
-);
-
-application.use(
-    '/',
-    backofficeserviceMiddleware
-);
+/** Add all middleware in routes folder */
+application.use('/api-documentation', apidocumentationMiddleware);
+application.use('/', registrationMiddleware);
+application.use('/', userMiddleware);
+application.use('/', backofficeserviceMiddleware);
 
 // catch 404 and forward to error handler
 application.use(function(request : any, response : any, next : any) {
@@ -66,15 +58,6 @@ application.use(function(error, request, response, next) {
             break;
     }
 
-});
-
-/**
- * Route to test API Rest
- */
-application.get('/hello/', (request, response, next) => {
-    response.setHeader('Access-Control-Allow-Origin', '*');
-
-    response.status(200).send('Hello Trip-x on duty!');
 });
 
 export default application;

@@ -9,12 +9,18 @@ import * as firebase from 'firebase';
  */
 const router = express.Router();
 
-router.get('/hello9', (request, response, next) => {
+/**
+ * route to check registration service is up
+ */
+router.get('/hello_registration', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     response.status(200).send('Hello on duty!');
 });
 
+/**
+ * route to register an user
+ */
 router.post('/user', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
     const email = request.body.email;

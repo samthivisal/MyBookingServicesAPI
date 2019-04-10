@@ -17,12 +17,18 @@ const db = admin.firestore();
  */
 const router = express.Router();
 
-router.get('/hello7', (request, response, next) => {
+/**
+ * route to check back office service is up
+ */
+router.get('/hello_back_office_service', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     response.status(200).send('Hello on duty!');
 });
 
+/**
+ * route ADD Hostel
+ */
 router.post('/hotel', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -49,6 +55,9 @@ router.post('/hotel', async (request, response, next) => {
     }
 });
 
+/**
+ * route ADD room to a specific hostel
+ */
 router.post('/hotel/add_room', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
