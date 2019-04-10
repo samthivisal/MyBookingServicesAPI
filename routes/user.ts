@@ -19,6 +19,24 @@ router.get('/hello_user', (request, response, next) => {
 });
 
 /**
+ * route to get an user info from a token
+ */
+router.get('/user/:token', (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    response.status(200).send(`User info from token : ${request.params.token}`);
+});
+
+/**
+ * route to send a password reset confirmation to an user
+ */
+router.get('/reset-password/:token', (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    response.status(200).send(`Password reset confirmation has been sent to user`);
+});
+
+/**
  * route to log an user
  */
 router.post('/user/login', async (request, response, next) => {
@@ -45,6 +63,18 @@ router.post('/user/login', async (request, response, next) => {
     } else {
         response.status(401).send(firebaseResponse["message"]);
     }
+});
+
+/**
+ * route to delete current user
+ */
+router.post('/user/delete', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    const email = request.body.email;
+    const password = request.body.password;
+    const token = request.body.tokent;
+
+    response.status(200).send(`${email} has been successfully deleted`);
 });
 
 export default router;

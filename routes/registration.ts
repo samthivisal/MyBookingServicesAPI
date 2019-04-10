@@ -41,4 +41,14 @@ router.post('/user', async (request, response, next) => {
     }
 });
 
+/**
+ * route to send a confirmation email to a specific user
+ */
+router.post('/send-email-confirmation', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    const email = request.body.email;
+
+    response.status(200).send(`email sent to ${email} successfully`);
+});
+
 export default router;

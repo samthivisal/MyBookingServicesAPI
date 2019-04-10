@@ -40,6 +40,20 @@ paths:
           description: "user created successfully"
         409:
           description: "user already exists"
+  /send-email-confirmation:
+    post:
+      tags:
+      - "REGISTRATION"
+      summary: "route to send confirmation email to user"
+      description: "route to send confirmation email to user"
+      parameters:
+      - name: "email"
+        description: "user mail address"
+        required: true
+        format: "string"
+      responses:
+        200:
+          description: "email sent to USER successfully"
 # =================================================================== User
   /hello_user:
     get:
@@ -50,6 +64,32 @@ paths:
       responses:
         200:
           description: "registration is up"
+  /user/{token}:
+    get:
+      tags:
+      - "USER"
+      summary: "route to get an user info from a token"
+      description: "route to get an user info from a token"
+      parameters:
+      - name: "token"
+        description: "UID stored in session"
+        required: true
+      responses:
+        200:
+          description: "registration is up"
+  /reset-password/{token}:
+    get:
+      tags:
+      - "USER"
+      summary: "route to send a password reset confirmation to an user"
+      description: "route to send a password reset confirmation to an user"
+      parameters:
+      - name: "token"
+        description: "UID stored in session"
+        required: true
+      responses:
+        200:
+          description: "Password reset confirmation has been sent to user"
   /user/login:
     post:
       tags:
@@ -70,3 +110,25 @@ paths:
           description: "user logged in successfully"
         401:
           description: "user already logged in"
+  /user/delete:
+    post:
+      tags:
+      - "USER"
+      summary: "route to delete current user"
+      description: "route to delete current user"
+      parameters:
+      - name: "email"
+        description: "user mail address"
+        required: true
+        format: "string"
+      - name: "password"
+        description: "user password"
+        required: true
+        type: "string"
+      - name: "token"
+        description: "UID stored in session"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "EMAIL has been successfully deleted"
