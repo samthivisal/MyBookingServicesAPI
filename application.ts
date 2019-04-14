@@ -9,6 +9,7 @@ import * as bodyParser from 'body-parser';
 import registrationMiddleware from './routes/registration';
 import userMiddleware from './routes/user';
 import backofficeserviceMiddleware from './routes/backofficeservice';
+import frontofficeserviceMiddleware from './routes/frontofficeservice';
 import apidocumentationMiddleware from './routes/api-documentation';
 
 const application = express();
@@ -30,6 +31,7 @@ application.use('/api-documentation', apidocumentationMiddleware);
 application.use('/', registrationMiddleware);
 application.use('/', userMiddleware);
 application.use('/', backofficeserviceMiddleware);
+application.use('/', frontofficeserviceMiddleware);
 
 // catch 404 and forward to error handler
 application.use(function(request : any, response : any, next : any) {
