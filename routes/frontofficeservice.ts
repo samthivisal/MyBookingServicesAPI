@@ -3,6 +3,8 @@
  */
 import * as express from 'express';
 import * as admin from 'firebase-admin';
+import * as firebase from 'firebase';
+import * as moment from 'moment';
 
 const db = admin.firestore();
 
@@ -20,10 +22,6 @@ router.get('/hello_front_office_service', (request, response, next) => {
     response.status(200).send('Hello on duty!');
 });
 
-function getHostelUID(hostelID) {
-
-}
-
 /**
  * route to get a hostel
  */
@@ -32,67 +30,41 @@ router.get('/hostel', async (request, response, next) => {
 
     const hostelID = request.body.hostelID;
 
-    const docRef = db.collection('Hotels').where('id', '==', hostelID);
+    const docRef = db.collection('Hostels').doc(hostelID);
 
     docRef.get()
         .then(snapshot => {
-            if (snapshot.empty) {
-                response.status(409).send('No such document!');
-                return;
+            if (typeof snapshot.data() !== "undefined"){
+                response.status(200).send(snapshot.data());
+            } else {
+                response.status(409).send('No hostel found with this ID');
             }
-            snapshot.forEach(doc => {
-                response.status(200).send(doc.id);
-            });
         })
-        .catch(err => {
-            response.status(409).send(err);
+        .catch((error) => {
+            response.status(409).send(error.message);
         });
 });
 
 /**
- * route to get a room from specific hotel
+ * route to get a room from specific hostel
  */
 router.get('/room', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    const hostelID = request.body.hostelID;
     const roomID = request.body.roomID;
 
-    // Get hostel UID
-    var hostelUID = "";
-    const docRef = db.collection('Hotels').where('id', '==', hostelID);
+    const docRef = db.collection('Rooms').doc(roomID);
 
     docRef.get()
         .then(snapshot => {
-            if (snapshot.empty) {
-                response.status(409).send('No such document!');
-                return;
+            if (typeof snapshot.data() !== "undefined"){
+                response.status(200).send(snapshot.data());
+            } else {
+                response.status(409).send('No room found with this ID');
             }
-
-            snapshot.forEach(doc => {
-                hostelUID = doc.id;
-            });
         })
-        .catch(err => {
-            response.status(409).send(err);
-        });
-
-    // Get room UID
-    const docRefHostel = db.collection('Hotels/' + hostelUID).where('id', '==', roomID);
-
-    docRefHostel.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                response.status(409).send('No such document!');
-                return;
-            }
-
-            snapshot.forEach(doc => {
-                response.status(200).send(doc.id);
-            });
-        })
-        .catch(err => {
-            response.status(409).send(err);
+        .catch((error) => {
+            response.status(409).send(error.message);
         });
 });
 
@@ -104,20 +76,18 @@ router.get('/room_type', async (request, response, next) => {
 
     const roomTypeID = request.body.roomTypeID;
 
-    const docRef = db.collection('Room_Type').where('id', '==', roomTypeID);
+    const docRef = db.collection('Room_Type').doc(roomTypeID);
 
     docRef.get()
         .then(snapshot => {
-            if (snapshot.empty) {
-                response.status(409).send('No such document!');
-                return;
+            if (typeof snapshot.data() !== "undefined"){
+                response.status(200).send(snapshot.data());
+            } else {
+                response.status(409).send('No room type found with this ID');
             }
-            snapshot.forEach(doc => {
-                response.status(200).send(doc.id);
-            });
         })
-        .catch(err => {
-            response.status(409).send(err);
+        .catch((error) => {
+            response.status(409).send(error.message);
         });
 });
 
@@ -127,45 +97,33 @@ router.get('/room_type', async (request, response, next) => {
 router.post('/front/book_room', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    const hostelID = request.body.hostelID;
-    const roomID = request.body.roomID;
+    // const toFormat = "2019-04-15 10:00:00";
+    // const date = moment(toFormat).format('YYYY-MM-DD[T]HH:mm:ss');
+    // console.log(moment(date).unix());
+    
+    // var startdate = moment(request.body.startdate).unix();
+    // var enddate = moment(request.body.enddate).unix();
 
-    // Get hostel UID
-    var hostelUID = "";
-    const docRef = db.collection('Hotels').where('id', '==', hostelID);
+    const roomBookedObj = {
+        room: request.body.roomID,
+        startdate: firebase.firestore.Timestamp.fromDate(new Date()),
+        enddate: new Date("April 20, 2019"),
+        user: request.body.userID
+    };
 
-    docRef.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                response.status(409).send('No such document!');
-                return;
-            }
-
-            snapshot.forEach(doc => {
-                hostelUID = doc.id;
-            });
+    const firebaseResponse = db.collection('Room_Booked').doc().set(roomBookedObj)
+        .then((response) => {
+            return {haveError: false};
         })
-        .catch(err => {
-            response.status(409).send(err);
+        .catch((error) => {
+            return {haveError: true, message: error.message}
         });
 
-    // Get room UID
-    const docRefHostel = db.collection('Hotels/' + hostelUID).where('id', '==', roomID);
-
-    docRefHostel.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                response.status(409).send('No such document!');
-                return;
-            }
-
-            snapshot.forEach(doc => {
-                response.status(200).send(doc.id);
-            });
-        })
-        .catch(err => {
-            response.status(409).send(err);
-        });
+    if (!firebaseResponse["haveError"]) {
+        response.status(200).send("Room booked successfully");
+    } else {
+        response.status(409).send(firebaseResponse["message"]);
+    }     
 });
 
 export default router;
