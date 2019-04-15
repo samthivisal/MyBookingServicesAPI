@@ -31,7 +31,7 @@ application.use('/api-documentation', apidocumentationMiddleware);
 application.use('/', registrationMiddleware);
 application.use('/', userMiddleware);
 application.use('/', backofficeserviceMiddleware);
-application.use('/', frontofficeserviceMiddleware);
+application.use('/front', frontofficeserviceMiddleware);
 
 // catch 404 and forward to error handler
 application.use(function(request : any, response : any, next : any) {

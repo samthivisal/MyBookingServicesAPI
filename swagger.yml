@@ -9,6 +9,8 @@ tags:
   description: "registration service"
 - name: "USER"
   description: "user service"
+- name: "FRONT OFFICE"
+  description: "front office service"
 paths:
 # =================================================================== REGISTRATION
   /hello_registration:
@@ -132,3 +134,46 @@ paths:
       responses:
         200:
           description: "EMAIL has been successfully deleted"
+# =================================================================== Front Office
+  /front/hello_front_office_service:
+    get:
+      tags:
+      - "FRONT OFFICE"
+      summary: "front office service check up"
+      description: "route to check front office service is up"
+      responses:
+        200:
+          description: "front office is up"
+  /front/hostel:
+    get:
+      tags:
+      - "FRONT OFFICE"
+      summary: "route to get a hostel info"
+      description: "route to get a hostel info"
+      parameters:
+      - name: "hostelID"
+        description: "Hostel ID"
+        required: true
+      responses:
+        200:
+          description: "Hostel UID returned"
+        409:
+          description: "Wrong hostel ID"
+  /front/room:
+    get:
+      tags:
+      - "FRONT OFFICE"
+      summary: "route to get a room info"
+      description: "route to get a room info"
+      parameters:
+      - name: "hostelID"
+        description: "Hostel ID"
+        required: true
+      - name: "roomID"
+        description: "Room ID"
+        required: true
+      responses:
+        200:
+          description: "Room UID returned"
+        409:
+          description: "Wrong hostel ID or room ID"
