@@ -3,3 +3,4 @@
 .idea/*
 .env
 ServiceAccountKey.ts
+package-lock.json
