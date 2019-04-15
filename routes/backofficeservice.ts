@@ -4,18 +4,11 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 
-const serviceAccount = require('../../../ServiceAccountKey.json');
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
-
 /**
  * Express router usage
  */
 const router = express.Router();
+const db = admin.firestore();
 
 /**
  * route to check back office service is up
@@ -23,7 +16,7 @@ const router = express.Router();
 router.get('/hello_back_office_service', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    response.status(200).send('Hello on duty!');
+    response.status(200).send('back office service is on duty!');
 });
 
 /**
