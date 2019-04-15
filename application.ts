@@ -26,8 +26,6 @@ application.options("/*", function(request, response, next){
     next();
 });
 
-
-
 /** Add all middleware in routes folder */
 application.use('/api-documentation', apidocumentationMiddleware);
 application.use('/', registrationMiddleware);
