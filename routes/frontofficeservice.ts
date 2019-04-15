@@ -20,8 +20,7 @@ router.get('/hello_front_office_service', (request, response, next) => {
     response.status(200).send('Hello on duty!');
 });
 
-function getHostelUID(hostelID)
-{
+function getHostelUID(hostelID) {
 
 }
 
@@ -36,18 +35,18 @@ router.get('/hostel', async (request, response, next) => {
     const docRef = db.collection('Hotels').where('id', '==', hostelID);
 
     docRef.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        response.status(409).send('No such document!');
-        return;
-      } 
-      snapshot.forEach(doc => {
-          response.status(200).send(doc.id);
-      });
-    })
-    .catch(err => {
-        response.status(409).send(err);
-    });
+        .then(snapshot => {
+            if (snapshot.empty) {
+                response.status(409).send('No such document!');
+                return;
+            }
+            snapshot.forEach(doc => {
+                response.status(200).send(doc.id);
+            });
+        })
+        .catch(err => {
+            response.status(409).send(err);
+        });
 });
 
 /**
@@ -58,43 +57,43 @@ router.get('/room', async (request, response, next) => {
 
     const hostelID = request.body.hostelID;
     const roomID = request.body.roomID;
-    
+
     // Get hostel UID
     var hostelUID = "";
     const docRef = db.collection('Hotels').where('id', '==', hostelID);
 
     docRef.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        response.status(409).send('No such document!');
-        return;
-      }
+        .then(snapshot => {
+            if (snapshot.empty) {
+                response.status(409).send('No such document!');
+                return;
+            }
 
-      snapshot.forEach(doc => {
-        hostelUID = doc.id;
-      });
-    })
-    .catch(err => {
-        response.status(409).send(err);
-    });
+            snapshot.forEach(doc => {
+                hostelUID = doc.id;
+            });
+        })
+        .catch(err => {
+            response.status(409).send(err);
+        });
 
     // Get room UID
     const docRefHostel = db.collection('Hotels/' + hostelUID).where('id', '==', roomID);
 
     docRefHostel.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        response.status(409).send('No such document!');
-        return;
-      }
+        .then(snapshot => {
+            if (snapshot.empty) {
+                response.status(409).send('No such document!');
+                return;
+            }
 
-      snapshot.forEach(doc => {
-        response.status(200).send(doc.id);
-      });
-    })
-    .catch(err => {
-        response.status(409).send(err);
-    });
+            snapshot.forEach(doc => {
+                response.status(200).send(doc.id);
+            });
+        })
+        .catch(err => {
+            response.status(409).send(err);
+        });
 });
 
 /**
@@ -108,18 +107,18 @@ router.get('/room_type', async (request, response, next) => {
     const docRef = db.collection('Room_Type').where('id', '==', roomTypeID);
 
     docRef.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        response.status(409).send('No such document!');
-        return;
-      } 
-      snapshot.forEach(doc => {
-          response.status(200).send(doc.id);
-      });
-    })
-    .catch(err => {
-        response.status(409).send(err);
-    });
+        .then(snapshot => {
+            if (snapshot.empty) {
+                response.status(409).send('No such document!');
+                return;
+            }
+            snapshot.forEach(doc => {
+                response.status(200).send(doc.id);
+            });
+        })
+        .catch(err => {
+            response.status(409).send(err);
+        });
 });
 
 /**
@@ -136,37 +135,37 @@ router.post('/front/book_room', async (request, response, next) => {
     const docRef = db.collection('Hotels').where('id', '==', hostelID);
 
     docRef.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        response.status(409).send('No such document!');
-        return;
-      }
+        .then(snapshot => {
+            if (snapshot.empty) {
+                response.status(409).send('No such document!');
+                return;
+            }
 
-      snapshot.forEach(doc => {
-        hostelUID = doc.id;
-      });
-    })
-    .catch(err => {
-        response.status(409).send(err);
-    });
+            snapshot.forEach(doc => {
+                hostelUID = doc.id;
+            });
+        })
+        .catch(err => {
+            response.status(409).send(err);
+        });
 
     // Get room UID
     const docRefHostel = db.collection('Hotels/' + hostelUID).where('id', '==', roomID);
 
     docRefHostel.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        response.status(409).send('No such document!');
-        return;
-      }
+        .then(snapshot => {
+            if (snapshot.empty) {
+                response.status(409).send('No such document!');
+                return;
+            }
 
-      snapshot.forEach(doc => {
-        response.status(200).send(doc.id);
-      });
-    })
-    .catch(err => {
-        response.status(409).send(err);
-    });
+            snapshot.forEach(doc => {
+                response.status(200).send(doc.id);
+            });
+        })
+        .catch(err => {
+            response.status(409).send(err);
+        });
 });
 
 export default router;
