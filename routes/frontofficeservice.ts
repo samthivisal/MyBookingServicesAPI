@@ -3,7 +3,6 @@
  */
 import * as express from 'express';
 import * as admin from 'firebase-admin';
-import * as firebase from 'firebase';
 import * as moment from 'moment';
 
 const db = admin.firestore();
@@ -34,7 +33,7 @@ router.get('/hostel', async (request, response, next) => {
 
     docRef.get()
         .then(snapshot => {
-            if (typeof snapshot.data() !== "undefined"){
+            if (typeof snapshot.data() !== "undefined") {
                 response.status(200).send(snapshot.data());
             } else {
                 response.status(409).send('No hostel found with this ID');
@@ -57,7 +56,7 @@ router.get('/room', async (request, response, next) => {
 
     docRef.get()
         .then(snapshot => {
-            if (typeof snapshot.data() !== "undefined"){
+            if (typeof snapshot.data() !== "undefined") {
                 response.status(200).send(snapshot.data());
             } else {
                 response.status(409).send('No room found with this ID');
@@ -80,7 +79,7 @@ router.get('/room_type', async (request, response, next) => {
 
     docRef.get()
         .then(snapshot => {
-            if (typeof snapshot.data() !== "undefined"){
+            if (typeof snapshot.data() !== "undefined") {
                 response.status(200).send(snapshot.data());
             } else {
                 response.status(409).send('No room type found with this ID');
@@ -94,20 +93,16 @@ router.get('/room_type', async (request, response, next) => {
 /**
  * route to book a room
  */
-router.post('/front/book_room', async (request, response, next) => {
+router.post('/book_room', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    // const toFormat = "2019-04-15 10:00:00";
-    // const date = moment(toFormat).format('YYYY-MM-DD[T]HH:mm:ss');
-    // console.log(moment(date).unix());
-    
-    // var startdate = moment(request.body.startdate).unix();
-    // var enddate = moment(request.body.enddate).unix();
+    const startDate = moment(request.body.startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+    const endDate = moment(request.body.endDate).format('YYYY-MM-DD[T]HH:mm:ss');
 
     const roomBookedObj = {
         room: request.body.roomID,
-        startdate: firebase.firestore.Timestamp.fromDate(new Date()),
-        enddate: new Date("April 20, 2019"),
+        startDate: moment(startDate).unix(),
+        endDate: moment(endDate).unix(),
         user: request.body.userID
     };
 
@@ -123,7 +118,7 @@ router.post('/front/book_room', async (request, response, next) => {
         response.status(200).send("Room booked successfully");
     } else {
         response.status(409).send(firebaseResponse["message"]);
-    }     
+    }
 });
 
 export default router;
