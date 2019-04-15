@@ -2,7 +2,16 @@
  * Import express framework
  */
 import * as express from 'express';
+import * as admin from 'firebase-admin';
 import * as firebase from 'firebase';
+
+import serviceAccount from '../ServiceAccountKey';
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
 
 /**
  * Express router usage
@@ -26,16 +35,27 @@ router.post('/user', async (request, response, next) => {
     const email = request.body.email;
     const password = request.body.password;
 
+    const newUser = {
+        firstname: request.body.firstname,
+        lastname: request.body.lastname,
+        age: request.body.age
+    };
+
     const firebaseResponse = await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((response) => {
-            return {haveError: false};
+            const newUID = response["user"].uid;
+
+            /** put new user in collections "users" with UID from firebase as id */
+            db.collection('users').doc(newUID).set(newUser);
+
+            return {haveError: false, uid: newUID};
         })
         .catch(function (error) {
             return {haveError: true, message: error.message}
         });
 
     if (!firebaseResponse["haveError"]) {
-        response.status(200).send("user created successfully");
+        response.status(200).send(`user created successfully : ${firebaseResponse["uid"]}`);
     } else {
         response.status(409).send(firebaseResponse["message"]);
     }

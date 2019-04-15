@@ -4,18 +4,11 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 
-const serviceAccount = require('../../../ServiceAccountKey.json');
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
-
 /**
  * Express router usage
  */
 const router = express.Router();
+const db = admin.firestore();
 
 /**
  * route to check back office service is up

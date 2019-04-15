@@ -3,11 +3,14 @@
  */
 import * as express from 'express';
 import * as firebase from 'firebase';
+import * as admin from 'firebase-admin';
 
 /**
  * Express router usage
  */
 const router = express.Router();
+
+const db = admin.firestore();
 
 /**
  * route to check user service is up
@@ -24,7 +27,20 @@ router.get('/hello_user', (request, response, next) => {
 router.get('/user/:token', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    response.status(200).send(`User info from token : ${request.params.token}`);
+    const token = request.params.token;
+
+    db.collection("Users").doc(token).get()
+        .then((snapshot) => {
+            if (typeof snapshot.data() !== "undefined"){
+                response.status(200).send(`User info from token : ${JSON.stringify(snapshot.data())}`);
+            } else {
+                response.status(409).send(`no user found for this Id`);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            response.status(409).send(error.message);
+        });
 });
 
 /**
@@ -48,7 +64,7 @@ router.post('/user/login', async (request, response, next) => {
         .then((response) => {
             let uid = "";
 
-            if (response !== null){
+            if (response !== null) {
                 uid = response["user"].uid;
             }
 
@@ -58,7 +74,7 @@ router.post('/user/login', async (request, response, next) => {
             return {haveError: true, message: error.message}
         });
 
-    if (!firebaseResponse["haveError"]){
+    if (!firebaseResponse["haveError"]) {
         response.status(200).send(firebaseResponse["uid"]);
     } else {
         response.status(401).send(firebaseResponse["message"]);
