@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/hello_user', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    response.status(200).send('Hello on duty!');
+    response.status(200).send('user is on duty!');
 });
 
 /**
@@ -72,7 +72,7 @@ router.post('/user/delete', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
     const email = request.body.email;
     const password = request.body.password;
-    const token = request.body.tokent;
+    const token = request.body.token;
 
     response.status(200).send(`${email} has been successfully deleted`);
 });

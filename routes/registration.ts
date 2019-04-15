@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/hello_registration', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    response.status(200).send('Hello on duty!');
+    response.status(200).send('registration is on duty!');
 });
 
 /**

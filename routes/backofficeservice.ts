@@ -23,7 +23,7 @@ const router = express.Router();
 router.get('/hello_back_office_service', (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
-    response.status(200).send('Hello on duty!');
+    response.status(200).send('back office service is on duty!');
 });
 
 /**
