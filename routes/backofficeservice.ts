@@ -22,7 +22,7 @@ router.get('/hello_back_office_service', (request, response, next) => {
 /**
  * route ADD Hostel
  */
-router.post('/hotel', async (request, response, next) => {
+router.post('/hostel', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     const hostelObject = {
@@ -49,7 +49,7 @@ router.post('/hotel', async (request, response, next) => {
 /**
  * route update hostel
  * */
-router.put('/hotel/:hostelId', async (request, response, next) => {
+router.put('/hostel/:hostelId', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     const hostelId = request.params.hostelId;
@@ -73,7 +73,7 @@ router.put('/hotel/:hostelId', async (request, response, next) => {
 /**
  * route delete room
  */
-router.delete('/hotel/:hostelId', async (request, response, next) => {
+router.delete('/hostel/:hostelId', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     const hostelId = request.params.hostelId;

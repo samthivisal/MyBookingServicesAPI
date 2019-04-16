@@ -37,6 +37,18 @@ paths:
         description: "user password"
         required: true
         type: "string"
+      - name: "firstname"
+        description: "user firstname"
+        required: true
+        type: "string"
+      - name: "lastname"
+        description: "user lastname"
+        required: true
+        type: "string"
+      - name: "age"
+        description: "user age"
+        required: false
+        type: "string"
       responses:
         200:
           description: "user created successfully"
@@ -74,7 +86,7 @@ paths:
       description: "route to get an user info from a token"
       parameters:
       - name: "token"
-        description: "UID stored in session"
+        description: "UID provided by user"
         required: true
       responses:
         200:

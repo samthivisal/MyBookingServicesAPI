@@ -46,7 +46,7 @@ router.post('/user', async (request, response, next) => {
             const newUID = response["user"].uid;
 
             /** put new user in collections "users" with UID from firebase as id */
-            db.collection('users').doc(newUID).set(newUser);
+            db.collection('Users').doc(newUID).set(newUser);
 
             return {haveError: false, uid: newUID};
         })
