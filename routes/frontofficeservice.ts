@@ -96,16 +96,18 @@ router.get('/room_type', async (request, response, next) => {
 router.post('/book_room', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
+    const roomID = request.body.roomID;
     const startDate = moment(request.body.startDate).format('YYYY-MM-DD[T]HH:mm:ss');
     const endDate = moment(request.body.endDate).format('YYYY-MM-DD[T]HH:mm:ss');
 
     const roomBookedObj = {
-        room: request.body.roomID,
+        room: roomID,
         startDate: moment(startDate).unix(),
         endDate: moment(endDate).unix(),
         user: request.body.userID
     };
 
+    // Create a new booked room
     const firebaseResponse = db.collection('Room_Booked').doc().set(roomBookedObj)
         .then((response) => {
             return {haveError: false};
@@ -114,11 +116,33 @@ router.post('/book_room', async (request, response, next) => {
             return {haveError: true, message: error.message}
         });
 
-    if (!firebaseResponse["haveError"]) {
+    if (firebaseResponse["haveError"]) {
+        response.status(409).send(firebaseResponse["message"]);
+        return;
+    }
+
+    // Update the room
+    const firebaseResponse2 = db.collection('Rooms').doc(roomID).update({"booked":true})
+        .then((response) => {
+            return {haveError: false};
+        })
+        .catch((error) => {
+            return {haveError: true, message: error.message};
+        });
+
+    if (!firebaseResponse2["haveError"]) {
         response.status(200).send("Room booked successfully");
     } else {
-        response.status(409).send(firebaseResponse["message"]);
+        response.status(409).send(firebaseResponse2["message"]);
     }
+});
+
+/**
+ * route to book a parking
+ */
+router.post('/book_parking', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
 });
 
 export default router;
