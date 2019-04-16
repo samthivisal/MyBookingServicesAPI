@@ -13,7 +13,7 @@ const exampleBody = {
 describe('it should test front office service routes', () => {
     it('Should be OK for : get /hello_front_office_service', (done) => {
         request(application)
-            .get('/hello_front_office_service')
+            .get('/front/hello_front_office_service')
             .expect(200)
             .expect((res) => {
                 expect(res.text).toEqual('front office service is on duty!');
