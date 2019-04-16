@@ -7,7 +7,7 @@ const contactConfirmationMail = {
 };
 
 const exampleBody = {
-    token : "exampleToken"
+    token : "8Pd2KSASkMRmUhkYkIAwSdbB5Rw2"
 };
 
 describe('it should test user routes', () => {
@@ -31,9 +31,6 @@ describe('it should test user routes', () => {
         request(application)
             .get(`/user/${exampleBody.token}`)
             .expect(200)
-            .expect((res) => {
-                expect(res.text).toEqual(`User info from token : exampleToken`);
-            })
             .end((error, response) => {
                 if (error) {
                     return done(error);
