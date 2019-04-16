@@ -28,7 +28,9 @@ router.post('/hostel', async (request, response, next) => {
     const hostelObject = {
         name: request.body.name,
         stars: request.body.stars,
-        city: request.body.city
+        address: request.body.address,
+        city: request.body.city,
+        phone: request.body.phone
     };
 
     const firebaseResponse = db.collection('Hostels').doc().set(hostelObject)
@@ -100,16 +102,11 @@ router.post('/room', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     const hostelId = request.body.hostelId;
-    const roomName = request.body.name;
     const roomType = request.body.type;
-    const roomPrice = request.body.price;
 
     const newRoomObject = {
-        booked: false,
-        hostelId: hostelId,
-        name: roomName,
-        type: roomType,
-        price: roomPrice
+        hostel: hostelId,
+        type: roomType
     };
 
     const firebaseResponse = db.collection('Rooms').doc().set(newRoomObject)
@@ -181,9 +178,13 @@ router.post('/room-type', async (request, response, next) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
 
     const roomType = request.body.type;
+    const roomPrice = request.body.price;
+    const roomNbPerson = request.body.nbPerson;
 
     const newRoomTypeObject = {
-        type: roomType
+        type: roomType,
+        price: roomPrice,
+        nbPerson: roomNbPerson
     };
 
     const firebaseResponse = db.collection('Room_Type').doc().set(newRoomTypeObject)
@@ -243,6 +244,82 @@ router.delete('/room-type/:roomTypeId', async (request, response, next) => {
 
     if (!firebaseResponse["haveError"]) {
         response.status(200).send(`room deleted successfully`);
+    } else {
+        response.status(409).send(firebaseResponse["message"]);
+    }
+});
+
+/**
+ * route add parking
+ */
+router.post('/parking', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    const parkingHostel = request.body.hostelId;
+    const parkingPrice = request.body.price;
+
+    const newParkingObject = {
+        hostel: parkingHostel,
+        price: parkingPrice
+    };
+
+    const firebaseResponse = db.collection('Parkings').doc().set(newParkingObject)
+        .then((response) => {
+            return {haveError: false};
+        })
+        .catch((error) => {
+            return {haveError: true, message: error.message}
+        });
+
+    if (!firebaseResponse["haveError"]) {
+        response.status(200).send("parking added successfully");
+    } else {
+        response.status(409).send(firebaseResponse["message"]);
+    }
+});
+
+/**
+ * route update parking
+ * */
+router.put('/parking/:parkingId', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    const parkingId = request.params.parkingId;
+    const newParkingObject = request.body;
+
+    const firebaseResponse = db.collection('Parkings').doc(parkingId).update(newParkingObject)
+        .then((response) => {
+            return {haveError: false};
+        })
+        .catch((error) => {
+            return {haveError: true, message: error.message}
+        });
+
+    if (!firebaseResponse["haveError"]) {
+        response.status(200).send("parking updated successfully");
+    } else {
+        response.status(409).send(firebaseResponse["message"]);
+    }
+});
+
+/**
+ * route delete parking
+ */
+router.delete('/parking/:parkingId', async (request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    const parkingId = request.params.parkingId;
+
+    const firebaseResponse = db.collection('Parkings').doc(parkingId).delete()
+        .then((response) => {
+            return {haveError: false};
+        })
+        .catch((error) => {
+            return {haveError: true, message: error.message}
+        });
+
+    if (!firebaseResponse["haveError"]) {
+        response.status(200).send("parking deleted successfully");
     } else {
         response.status(409).send(firebaseResponse["message"]);
     }

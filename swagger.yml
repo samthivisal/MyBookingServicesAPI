@@ -34,7 +34,7 @@ paths:
       - name: "email"
         description: "user mail address"
         required: true
-        format: "string"
+        type: "string"
       - name: "password"
         description: "user password"
         required: true
@@ -66,7 +66,7 @@ paths:
       - name: "email"
         description: "user mail address"
         required: true
-        format: "string"
+        type: "string"
       responses:
         200:
           description: "email sent to USER successfully"
@@ -116,7 +116,7 @@ paths:
       - name: "email"
         description: "user mail address"
         required: true
-        format: "string"
+        type: "string"
       - name: "password"
         description: "user password"
         required: true
@@ -136,7 +136,7 @@ paths:
       - name: "email"
         description: "user mail address"
         required: true
-        format: "string"
+        type: "string"
       - name: "password"
         description: "user password"
         required: true
@@ -168,7 +168,7 @@ paths:
       - name: "name"
         description: "hostel name"
         required: true
-        format: "string"
+        type: "string"
       - name: "stars"
         description: "stars number"
         required: true
@@ -230,7 +230,7 @@ paths:
       - name: "hostelId"
         description: "hostel id"
         required: true
-        format: "string"
+        type: "string"
       - name: "name"
         description: "hostel name"
         required: true
@@ -248,7 +248,7 @@ paths:
           description: "room added successfully"
         409:
           description: "room already exists"
-  /hostel/{roomId}:
+  /room/{roomId}:
     put:
       tags:
       - "BACK OFFICE"
@@ -286,46 +286,155 @@ paths:
           description: "room deleted successfully"
         404:
           description: "room not found"
+  /parking:
+    post:
+      tags:
+      - "BACK OFFICE"
+      summary: "route ADD parking to a specific hostel"
+      description: "route ADD parking to a specific hostel"
+      parameters:
+      - name: "hostelId"
+        description: "Hostel ID"
+        required: true
+        type: "string"
+      - name: "price"
+        description: "Parking price"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "Parking added successfully"
+        409:
+          description: "Parking already exists"
+  /parking/{parkingId}:
+    put:
+      tags:
+      - "BACK OFFICE"
+      summary: "route update parking"
+      description: "route update parking"
+      parameters:
+      - name: "parkingId"
+        in: "path"
+        description: "parking id to update data"
+        required: true
+        type: "string"
+      - name: "parkingObject"
+        in: "path"
+        description: "parking object to update"
+        required: true
+        type: "object"
+      responses:
+        200:
+          description: "parking updated successfully"
+        404:
+          description: "parking not found"
+    delete:
+      tags:
+      - "BACK OFFICE"
+      summary: "route delete parking"
+      description: "route delete parking"
+      parameters:
+      - name: "parkingId"
+        in: "path"
+        description: "parking id to update data"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "parking deleted successfully"
+        404:
+          description: "parking not found"
 # =================================================================== Front Office
   /front/hello_front_office_service:
     get:
       tags:
       - "FRONT OFFICE"
-      summary: "front office service check up"
-      description: "route to check front office service is up"
+      summary: "Front office service check up"
+      description: "Route to check front office service is up"
       responses:
         200:
-          description: "front office is up"
+          description: "Front office is up"
   /front/hostel:
     get:
       tags:
       - "FRONT OFFICE"
-      summary: "route to get a hostel info"
-      description: "route to get a hostel info"
+      summary: "Route to get a hostel info"
+      description: "Route to get a hostel info"
       parameters:
       - name: "hostelID"
         description: "Hostel ID"
         required: true
+        type: "string"
       responses:
         200:
-          description: "Hostel UID returned"
+          description: "Hostel object returned"
         409:
           description: "Wrong hostel ID"
   /front/room:
     get:
       tags:
       - "FRONT OFFICE"
-      summary: "route to get a room info"
-      description: "route to get a room info"
+      summary: "Route to get a room info"
+      description: "Route to get a room info"
       parameters:
       - name: "hostelID"
         description: "Hostel ID"
         required: true
+        type: "string"
       - name: "roomID"
         description: "Room ID"
         required: true
+        type: "string"
       responses:
         200:
-          description: "Room UID returned"
+          description: "Room object returned"
         409:
           description: "Wrong hostel ID or room ID"
+  /front/room-type:
+    get:
+      tags:
+      - "FRONT OFFICE"
+      summary: "Route to get a room type info"
+      description: "Route to get a room type info"
+      parameters:
+      - name: "roomTypeID"
+        description: "Room Type ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Room Type object returned"
+        409:
+          description: "Wrong room type ID"
+  /front/book_room:
+    post:
+      tags:
+      - "FRONT OFFICE"
+      summary: "Route to book a room"
+      description: "Route to book a room"
+      parameters:
+      - name: "roomID"
+        description: "Room ID"
+        required: true
+        type: "string"
+      - name: "startDate"
+        description: "First date of booking"
+        required: true
+        type: "date"
+      - name: "endDate"
+        description: "Last date of booking"
+        required: true
+        type: "date"
+      - name: "userID"
+        description: "User ID"
+        required: true
+        type: "string"
+      - name: "parkingID"
+        description: "Parking ID"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Room booked successfully"
+        409:
+          description: "Fail to book room"
