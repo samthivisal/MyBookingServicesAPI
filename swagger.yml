@@ -9,6 +9,8 @@ tags:
   description: "registration service"
 - name: "USER"
   description: "user service"
+- name: "BACK OFFICE"
+  description: "back office service"
 - name: "FRONT OFFICE"
   description: "front office service"
 paths:
@@ -121,7 +123,7 @@ paths:
         type: "string"
       responses:
         200:
-          description: "user logged in successfully"
+          description: "user ID"
         401:
           description: "user already logged in"
   /user/delete:
@@ -146,6 +148,144 @@ paths:
       responses:
         200:
           description: "EMAIL has been successfully deleted"
+# =================================================================== Back Office
+  /hello_back_office_service:
+    get:
+      tags:
+      - "BACK OFFICE"
+      summary: "BACK OFFICE service check up"
+      description: "route to check BACK OFFICE service is up"
+      responses:
+        200:
+          description: "BACK OFFICE is up"
+  /hostel:
+    post:
+      tags:
+      - "BACK OFFICE"
+      summary: "route to create a hostel"
+      description: "route to create a hostel"
+      parameters:
+      - name: "name"
+        description: "hostel name"
+        required: true
+        format: "string"
+      - name: "stars"
+        description: "stars number"
+        required: true
+        type: "string"
+      - name: "city"
+        description: "hostel city"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Hostel added successfully"
+        409:
+          description: "hostel already exists"
+  /hostel/{hostelId}:
+    put:
+      tags:
+      - "BACK OFFICE"
+      summary: "route update hostel"
+      description: "route update hostel"
+      parameters:
+      - name: "hostelId"
+        in: "path"
+        description: "hostel id to update data"
+        required: true
+        type: "string"
+      - name: "hostelObject"
+        in: "path"
+        description: "hostel object to update"
+        required: true
+        type: "object"
+      responses:
+        200:
+          description: "hostel updated successfully"
+        404:
+          description: "hostel not found"
+    delete:
+      tags:
+      - "BACK OFFICE"
+      summary: "route delete hostel"
+      description: "route delete hostel"
+      parameters:
+      - name: "hostelId"
+        in: "path"
+        description: "hostel id to update data"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "hostel deleted successfully"
+        404:
+          description: "hostel not found"
+  /room:
+    post:
+      tags:
+      - "BACK OFFICE"
+      summary: "route ADD room to a specific hostel"
+      description: "route ADD room to a specific hostel"
+      parameters:
+      - name: "hostelId"
+        description: "hostel id"
+        required: true
+        format: "string"
+      - name: "name"
+        description: "hostel name"
+        required: true
+        type: "string"
+      - name: "type"
+        description: "hostel type"
+        required: true
+        type: "string"
+      - name: "price"
+        description: "hostel price"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "room added successfully"
+        409:
+          description: "room already exists"
+  /hostel/{roomId}:
+    put:
+      tags:
+      - "BACK OFFICE"
+      summary: "route update room"
+      description: "route update room"
+      parameters:
+      - name: "roomId"
+        in: "path"
+        description: "room id to update data"
+        required: true
+        type: "string"
+      - name: "roomObject"
+        in: "path"
+        description: "room object to update"
+        required: true
+        type: "object"
+      responses:
+        200:
+          description: "room updated successfully"
+        404:
+          description: "room not found"
+    delete:
+      tags:
+      - "BACK OFFICE"
+      summary: "route delete room"
+      description: "route delete room"
+      parameters:
+      - name: "roomId"
+        in: "path"
+        description: "room id to update data"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "room deleted successfully"
+        404:
+          description: "room not found"
 # =================================================================== Front Office
   /front/hello_front_office_service:
     get:
