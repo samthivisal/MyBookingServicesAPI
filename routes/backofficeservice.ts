@@ -87,7 +87,7 @@ router.delete('/hostel/:hostelId', async (request, response, next) => {
         });
 
     if (!firebaseResponse["haveError"]) {
-        response.status(200).send(`Hostels deleted successfully`);
+        response.status(200).send(`Hostel deleted successfully`);
     } else {
         response.status(409).send(firebaseResponse["message"]);
     }
